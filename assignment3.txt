@@ -1,0 +1,49 @@
+Field : Field Type
+
+<fieldType name="id" class="solr.StrField" required="true" multivalued="false" indexed="true" stored="true"></fieldType>
+<fieldType name="country" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="state" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="city" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="spacetype" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="timings" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="category" class="solr.StrField" required="true" multivalued="false"></fieldType>
+<fieldType name="description" class="solr.TextField" required="true" multivalued="false">	
+	<analyzer type="index">
+		<tokenizer class=""solr.StandardTokenizerFactory">
+		<filter class="solr.LowercaseFilterFactory"/>
+		<filter class="solr.StopFilterFactory"/>
+		<filter class="solr.PorterStemFilterFactory"/>
+	</analyzer>
+	<analyzer type="query">
+		<tokenizer class=""solr.StandardTokenizerFactory">
+		<filter class="solr.LowercaseFilterFactory"/>
+		<filter class="solr.StopFilterFactory"/>
+	</analyzer>
+</fieldType>
+<fieldType name="title" class="solr.TextField" required="true" multivalued="false">
+	<analyzer>
+		<tokenizer class=""solr.StandardTokenizerFactory"/>
+		<filter class="solr.LowercaseFilterFactory"/>
+	</analyzer>
+</fieldType>
+<fieldType name="availability" class="solr.DatePointField" required="true" multivalued="false">
+<uniquekey>id</uniquekey>
+
+1) country, state, city, space_type,timings, category: we don't want them to be analyzed but indexed and stored. Hence StrField could be used for these. Not tokenized. No analyzer needed
+
+2) space name/ title: want to be indexed, analyzed, stored:TextField could be used
+
+3) title: can also use type as content i.e. text_general using StandardTokenizerFactory, StopFilterFactory and LowerCaseFilterFactory
+
+4) availability like date could use pdate:DatePointField, for range search
+
+5) id: of type id
+6) _version_
+
+
+
+
+
+
+
+
